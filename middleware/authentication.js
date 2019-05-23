@@ -1,7 +1,7 @@
 const User = require('../models/user');
 const createError = require('http-errors');
 
-module.exports = (req,res,next) => {
+module.exports = async (req,res,next) => {
     try {
         const {authorization: token} = req.headers;
         if(!token) throw new Error('Authentication failed!');

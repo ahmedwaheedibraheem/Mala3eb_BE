@@ -3,6 +3,7 @@ var express = require('express');
 var logger = require('morgan');
 
 const userRouter = require('./routes/user');
+const playerRouter = require('./routes/player');
 
 require('./db');
 
@@ -14,6 +15,7 @@ app.use(express.urlencoded({ extended: false }));
 
 // Routes
 app.use('/user', userRouter);
+app.use('/player', playerRouter);
 
 // Catch 404 and forward to error handler
 app.use(function(req, res, next) {

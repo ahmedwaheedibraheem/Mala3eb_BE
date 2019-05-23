@@ -12,15 +12,13 @@ const verify = util.promisify(jwt.verify);
 const saltRounds = Number(process.env.SALT_ROUNDS) || 10;
 const secretKey = process.env.SECRET_KEY || 'jesuistrescontentdetevoirenegypt';
 const tokenExpiry = process.env.TOKEN_EXPIRY || '15m'
-
-// userSchema
 const userSchema = new mongoose.Schema({
     firstname: {
         type: String,
         maxlength: 10,
         required: true
     },
-    lastname:{
+    lastname: {
         type: String,
         maxlength: 10,
         required: true
@@ -34,6 +32,12 @@ const userSchema = new mongoose.Schema({
         required: true,
         index: { unique: true },
         validate: validator.isEmail
+    },
+    playerId: {
+        type: String
+    },
+    pitchId: {
+        type: Array
     }
 },
     {

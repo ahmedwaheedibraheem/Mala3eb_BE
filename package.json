@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www"
+    "start": "nodemon ./bin/www",
+    "dev": "nodemon ./bin/www",
+    "debug": "node --inspect ./bin/www"
   },
   "dependencies": {
     "bcrypt": "^3.0.6",
