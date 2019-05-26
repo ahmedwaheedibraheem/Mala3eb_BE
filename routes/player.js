@@ -21,10 +21,15 @@ router.get('/', async (req, res, next) => {
 //addPlayer
 router.post('/add', async (req, res, next) => {
     try {
-        const { name, favNum, age, mobileNo, governerate, city } = req.body;
-        const newPlayer = new Player({ name, favNum, age, mobileNo, governerate, city });
-        const player = new Player(newPlayer);
-        let addedPlayer = await player.save();
+        const obj = {};
+        let arr = ["name", "favNum", "age", "mobileNo", "governerate", "city"];
+        arr.forEach(field => {
+            if (req.body[field]) {
+                obj[field] = req.body[field];
+            }
+        })
+        const newPlayer = new Player(obj);
+        let addedPlayer = await newPlayer.save();
         await User.findByIdAndUpdate(req.user._id, { playerId: addedPlayer._id });
         res.send(player)
     } catch (error) {
