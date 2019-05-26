@@ -7,7 +7,7 @@ const authenticationMiddWare = require('../middleware/authentication');
 
 router.use(authenticationMiddWare);
 
-//getPlayer
+//getPlayerData
 router.get('/', async (req, res, next) => {
     try {
         let player = await Player.find({ _id: req.user.playerId });
@@ -21,6 +21,9 @@ router.get('/', async (req, res, next) => {
 //addPlayer
 router.post('/add', async (req, res, next) => {
     try {
+        if (req.user.playerId) {
+            return res.send('This user is Already aplayer !');
+        }
         const obj = {};
         let arr = ["name", "favNum", "age", "mobileNo", "governerate", "city"];
         arr.forEach(field => {
@@ -31,7 +34,7 @@ router.post('/add', async (req, res, next) => {
         const newPlayer = new Player(obj);
         let addedPlayer = await newPlayer.save();
         await User.findByIdAndUpdate(req.user._id, { playerId: addedPlayer._id });
-        res.send(player)
+        res.send(addedPlayer);
     } catch (error) {
         next(createError(400, error));
     }
@@ -49,7 +52,7 @@ router.post('/add', async (req, res, next) => {
 //     }
 // });
 
-//updatePlayerData
+//EditPlayerData
 router.patch('/data', async (req, res, next) => {
     try {
         const obj = {};
@@ -73,7 +76,8 @@ router.delete('/', async (req, res, next) => {
         let player = await Player.find({ _id: req.user.playerId });
         if (!player) return next(createError(404, error));
         let deletedPlayer = await Player.deleteOne({ _id: req.user.playerId });
-        await User.deleteOne({ playerId: req.user.playerId });
+        let updatedUser = await User.findByIdAndUpdate(req.user.id,{playerId:null});
+        // await User.deleteOne({ playerId: req.user.playerId });
         res.send(deletedPlayer);
     }
     catch (error) {
