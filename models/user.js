@@ -1,17 +1,19 @@
+// user
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const util = require('util');
 
-// Verifying JWT methods
+
 const sign = util.promisify(jwt.sign);
 const verify = util.promisify(jwt.verify);
 
 // saltRounds, secretKey and tokenExpiry
 const saltRounds = Number(process.env.SALT_ROUNDS) || 10;
 const secretKey = process.env.SECRET_KEY || 'jesuistrescontentdetevoirenegypt';
-const tokenExpiry = process.env.TOKEN_EXPIRY || '15m'
+const tokenExpiry = process.env.TOKEN_EXPIRY || '15m';
+
 const userSchema = new mongoose.Schema({
     firstname: {
         type: String,
@@ -37,7 +39,7 @@ const userSchema = new mongoose.Schema({
         type: String
     },
     pitchId: {
-        type: Array
+        type: [String]
     }
 },
     {

@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/user');
 const createError = require('http-errors');
+
+const User = require('../models/user');
 
 // register
 router.post('/register', async (req,res,next) => {

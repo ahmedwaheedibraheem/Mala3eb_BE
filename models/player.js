@@ -82,7 +82,7 @@ const playerSchema = new mongoose.Schema({
         type: [Number]
     },
     commentIds: {
-        type: [Number]
+        type: [String]
     },
     favPitchs: {
         type: [Number]

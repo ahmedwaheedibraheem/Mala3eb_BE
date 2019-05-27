@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const createError = require('http-errors');
+
 var Player = require('../models/player');
 var User = require('../models/user');
 const authenticationMiddWare = require('../middleware/authentication');
@@ -31,7 +32,7 @@ router.post('/add', async (req, res, next) => {
         const newPlayer = new Player(obj);
         let addedPlayer = await newPlayer.save();
         await User.findByIdAndUpdate(req.user._id, { playerId: addedPlayer._id });
-        res.send(player)
+        res.send(addedPlayer)
     } catch (error) {
         next(createError(400, error));
     }
