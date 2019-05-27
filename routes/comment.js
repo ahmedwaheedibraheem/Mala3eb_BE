@@ -3,7 +3,7 @@ const router = express.Router();
 const Comment = require('../models/Comment');
 const CreateError = require('http-errors');
 const Player = require('../models/player');
-const Pitch = require('../models/Pitch');
+const Pitch = require('../models/pitch');
 
 const middelWareAuthentiacted = require('../middleware/authentication');
 
@@ -106,6 +106,7 @@ router.delete('/:commentId', async (req, res, next) => {
 router.delete('/:commentId/:pitchId', async (req, res, next) => {
     try {
         const pitch = await Pitch.findById({ _id: req.params.pitchId });
+        const comment = await Comment.findById({_id:req.params.commentId});
         const pitchComments = pitch.commentIds;
         const index = pitchComments.findIndex(el => el === req.params.commentId);
 

@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser');
 const userRouter = require('./routes/user');
 const playerRouter = require('./routes/player');
 const commentRouter = require('./routes/comment');
+const pitchRouter = require('./routes/pitch');
 
 require('./db');
 
@@ -22,9 +23,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use('/user', userRouter);
 app.use('/player',playerRouter);
 app.use('/comments',commentRouter);
+app.use('/pitch', pitchRouter);
+
 
 // Catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
