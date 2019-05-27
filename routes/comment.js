@@ -21,7 +21,6 @@ router.get('/', (req, res, next) => {
 })
 //add comment by playerUser
 
-//id-->da elly bt3amlo comment
 router.post('/player/:id', async (req, res, next) => {
     try {
         const { commentBody } = req.body;
