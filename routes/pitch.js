@@ -7,7 +7,6 @@ const User = require("../models/user");
 const authenticationMiddleware = require('../middleware/authentication')
 
 // get
-
 router.get("/", async (req, res, next) => {
     try {
         await Pitch.find({}, function (err, pitches) {
@@ -16,11 +15,9 @@ router.get("/", async (req, res, next) => {
     } catch (error) {
         next(createError(400, err))
     }
-
 });
 
 // get by id
-
 router.get("/:pitchId", async (req, res, next) => {
     try {
         const pitch = await Pitch.findOne({ _id: req.params.pitchId });
@@ -30,14 +27,9 @@ router.get("/:pitchId", async (req, res, next) => {
     }
 });
 
-
-
-
 router.use(authenticationMiddleware);
 
-
 // post
-
 router.post("/", async (req, res, next) => {
     try {
         const {
@@ -68,7 +60,6 @@ router.post("/", async (req, res, next) => {
             changeRoom,
             showerRoom,
             location
-
         });
         const addedPitch = await pitch.save()
         const USER = req.user;
@@ -82,21 +73,15 @@ router.post("/", async (req, res, next) => {
     }
 });
 
-
 // delete
-
 router.delete('/:pitchId', async (req, res, next) => {
     try {
-
         // delete the pitch itself
         let deletedPitch = await Pitch.deleteOne({ _id: req.user.pitchId });
-
         // delete pitchID
         let pitch = req.user.pitchId;
         pitch.splice(pitch.indexOf(req.params.pitchId), 1)
         await User.findByIdAndUpdate(req.user.id, { pitchId: pitch });
-
-
         res.send(deletedPitch);
     }
     catch (error) {
@@ -104,10 +89,7 @@ router.delete('/:pitchId', async (req, res, next) => {
     }
 })
 
-
-
 // patch
-
 router.patch('/:pitchId', async (req, res, next) => {
     const _id = req.params.pitchId;
     const obj = {};
@@ -132,8 +114,4 @@ router.patch('/:pitchId', async (req, res, next) => {
     res.send(pitch);
 })
 
-
 module.exports = router;
-
-
-
