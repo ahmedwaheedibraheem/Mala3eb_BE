@@ -49,8 +49,8 @@ const userSchema = new mongoose.Schema({
     });
 
 // Hidding password and __v
-userSchema.options.toJSON.transform = function(doc, ret, options){
-    if(Array.isArray(options.hidden)){
+userSchema.options.toJSON.transform = function (doc, ret, options) {
+    if (Array.isArray(options.hidden)) {
         options.hidden.forEach(field => {
             delete ret[field];
         });
@@ -59,27 +59,27 @@ userSchema.options.toJSON.transform = function(doc, ret, options){
 
 // Adding some methods to the user schema
 // verifyPassword
-userSchema.method('verifyPassword', function(enteredPassword){
+userSchema.method('verifyPassword', function (enteredPassword) {
     return bcrypt.compare(enteredPassword, this.password);
 });
 
 // generateToken
-userSchema.method('generateToken', function(){
-    return sign({_id: this.id}, secretKey, {expiresIn: tokenExpiry});
+userSchema.method('generateToken', function () {
+    return sign({ _id: this.id }, secretKey, { expiresIn: tokenExpiry });
 });
 
 // Adding a static method
 // getUserByToken
-userSchema.static('getUserByToken', async function(token){
+userSchema.static('getUserByToken', async function (token) {
     const decodedToken = await verify(token, secretKey);
     const user = await User.findById(decodedToken._id);
-    if(!user) throw new Error('User not found!');
+    if (!user) throw new Error('User not found!');
     return user;
 });
 
 // Hashing the password before saving
-userSchema.pre('save', async function(){
-    if(this.isNew || this.modifiedPaths().includes('password')){
+userSchema.pre('save', async function () {
+    if (this.isNew || this.modifiedPaths().includes('password')) {
         this.password = await bcrypt.hash(this.password, saltRounds);
     };
 });
