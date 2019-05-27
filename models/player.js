@@ -98,7 +98,16 @@ const playerSchema = new mongoose.Schema({
             transform: true
         }
     });
-    
+
+playerSchema.method('compute', function () {
+    this.skills.pass = this.skills.pass / this.evaluatores;
+    this.skills.shoot = this.skills.shoot / this.evaluatores;
+    this.skills.dribble = this.skills.dribble / this.evaluatores;
+    this.skills.fitness = this.skills.fitness / this.evaluatores;
+    this.skills.speed = this.skills.speed / this.evaluatores;
+    return this.skills;
+});
+
 // Creating player model
 const Player = mongoose.model('Player', playerSchema)
 
