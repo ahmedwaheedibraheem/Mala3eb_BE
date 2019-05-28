@@ -10,15 +10,34 @@ const middelWareAuthentiacted = require('../middleware/authentication');
 //use MiddleWare beacause Authentication when user login return token and and userLoged
 router.use(middelWareAuthentiacted);
 
-//get all comments of user logined
-router.get('/', (req, res, next) => {
+//get all comments of player
+router.get('/player/:playerId', async (req, res, next) => {
 
-    Comment.find({}, function (err, comments) {
-        if (err) return next(CreateError(400, err));
-        res.send(comments);
-    });
+    try {
+        const player = await Player.findById({ _id:req.params.playerId});
+        const playerComments = player.commentIds;
+        res.send(playerComments);
+    }
+    catch (err) {
+        return next(CreateError(400, err));
+    }
 
-})
+});
+
+// get comments of pitch
+
+router.get('/pitch/:pitchId',async (req,res,next)=>{
+    try{
+
+        const pitch = await Pitch.findById({ _id:req.params.pitchId});
+        const pitchComments = pitch.commentIds;
+        res.send(pitchComments); 
+    }
+    catch(err){
+        return next(CreateError(400,err));
+    }
+});
+
 //add comment by playerUser
 
 router.post('/player/:id', async (req, res, next) => {
@@ -105,7 +124,7 @@ router.delete('/:commentId', async (req, res, next) => {
 router.delete('/:commentId/:pitchId', async (req, res, next) => {
     try {
         const pitch = await Pitch.findById({ _id: req.params.pitchId });
-        const comment = await Comment.findById({_id:req.params.commentId});
+        const comment = await Comment.findById({ _id: req.params.commentId });
         const pitchComments = pitch.commentIds;
         const index = pitchComments.findIndex(el => el === req.params.commentId);
 
