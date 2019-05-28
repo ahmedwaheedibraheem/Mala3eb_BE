@@ -1,7 +1,7 @@
-const mongoose = require("mongoose")
-const validator = require("validator")
-
-var pitchSchema = new mongoose.Schema({
+// pitch
+const mongoose = require('mongoose');
+const validator = require('validator');
+const pitchSchema = new mongoose.Schema({
     name: {
         type: String,
         maxlength: 20,
@@ -91,12 +91,9 @@ var pitchSchema = new mongoose.Schema({
     }
 },
     {
-        collection: 'pitches',
+        collection: 'pitchs',
         toJSON: {
             hidden: ['__v'],
             transform: true
         }
     });
-var pitch = mongoose.model('pitch', pitchSchema);
-
-module.exports = pitch;
