@@ -34,8 +34,8 @@ router.post('/eval', async (req, res, next) => {
     }
 })
 
-//addPlayerImage
-router.post('/img', async (req, res, next) => {
+//editPlayerImage
+router.patch('/img', async (req, res, next) => {
     try {
         const { imgURL } = req.body;
         if (!imgURL) return next(createError(404, error));
@@ -54,7 +54,7 @@ router.post('/add', async (req, res, next) => {
             return res.send('This user is Already aplayer !');
         }
         const obj = {};
-        let arr = ["name", "favNum", "age", "mobileNo", "governerate", "city"];
+        let arr = ["name", "imgURL", "favNum", "age", "mobileNo", "governerate", "city"];
         arr.forEach(field => {
             if (req.body[field]) {
                 obj[field] = req.body[field];
