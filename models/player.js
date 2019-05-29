@@ -29,13 +29,10 @@ const playerSchema = new mongoose.Schema({
         validate: validator.isMobilePhone,
         required: true
     },
-    governerate: {  // search
+    address: {
         type: String,
-        required: true
-    },
-    city: {
-        type: String,
-        required: true
+        required: true,
+        maxlength: 300
     },
     positions: {
         type: [String],
