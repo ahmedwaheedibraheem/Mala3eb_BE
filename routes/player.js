@@ -9,7 +9,7 @@ const authenticationMiddWare = require('../middleware/authentication');
 router.use(authenticationMiddWare);
 
 //getPlayerData
-router.get('/', async (req, res, next) => {
+router.get('/getdata', async (req, res, next) => {
     try {
         let player = await Player.findOne({ _id: req.user.playerId });
         player.compute();
