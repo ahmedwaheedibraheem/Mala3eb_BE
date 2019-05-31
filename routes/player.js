@@ -54,7 +54,7 @@ router.post('/add', async (req, res, next) => {
             return res.send('This user is Already aplayer !');
         }
         const obj = {};
-        let arr = ["name", "imgURL", "favNum", "age", "mobileNo", "address"];
+        let arr = ["name", "imgURL", "favNum", "age", "mobileNo", "address", "favPosition"];
         arr.forEach(field => {
             if (req.body[field]) {
                 obj[field] = req.body[field];
@@ -73,7 +73,7 @@ router.post('/add', async (req, res, next) => {
 router.patch('/data', async (req, res, next) => {
     try {
         const obj = {};
-        let arr = ["name", "favNum", "age", "mobileNo", "address"];
+        let arr = ["name", "favNum", "age", "mobileNo", "address", "favPosition"];
         arr.forEach(field => {
             if (req.body[field]) {
                 obj[field] = req.body[field];

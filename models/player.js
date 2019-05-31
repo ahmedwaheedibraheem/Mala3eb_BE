@@ -34,9 +34,9 @@ const playerSchema = new mongoose.Schema({
         required: true,
         maxlength: 300
     },
-    positions: {
-        type: [String],
-        maxlength: 3, // search
+    favPosition: {
+        type: String,
+        maxlength: 10, 
         required: true
     },
     skills: {
