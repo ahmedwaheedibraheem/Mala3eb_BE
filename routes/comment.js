@@ -4,6 +4,7 @@ const Comment = require('../models/Comment');
 const CreateError = require('http-errors');
 const Player = require('../models/player');
 const Pitch = require('../models/pitch');
+const User = require('../models/user');
 
 const middelWareAuthentiacted = require('../middleware/authentication');
 
@@ -14,9 +15,17 @@ router.use(middelWareAuthentiacted);
 router.get('/player/:playerId', async (req, res, next) => {
 
     try {
-        const player = await Player.findById({ _id:req.params.playerId});
+        const player = await Player.findById(req.params.playerId);
         const playerComments = player.commentIds;
-        res.send(playerComments);
+        console.log(playerComments);
+        const comments = [];
+        for (let key of playerComments) {
+            comments.push(Comment.findById(key));
+        }
+        let commentsArr = await Promise.all(comments);
+        let user = await User.findById(req.user._id);
+         res.send({user,commentsArr});
+       
     }
     catch (err) {
         return next(CreateError(400, err));
@@ -31,7 +40,11 @@ router.get('/pitch/:pitchId',async (req,res,next)=>{
 
         const pitch = await Pitch.findById({ _id:req.params.pitchId});
         const pitchComments = pitch.commentIds;
-        res.send(pitchComments); 
+        const comments = [];
+        for (let key of pitchComments) {
+            comments.push(Comment.findById(key))    
+        }
+         res.send(await Promise.all(comments));
     }
     catch(err){
         return next(CreateError(400,err));
@@ -45,10 +58,13 @@ router.post('/player/:id', async (req, res, next) => {
         const { commentBody } = req.body;
         const commentObj = new Comment({
             userId: req.user._id,
+            userFname:req.user.firstname,
+            userLname:req.user.lastname,
             commentDate: new Date(),
             commentBody: commentBody
         });
         const commentAdded = await commentObj.save();
+        console.log(commentAdded);
         const commentId = commentAdded._id;
 
         //add commentId in commentIds array at player
@@ -73,6 +89,8 @@ router.post('/pitch/:pitchId', async (req, res, next) => {
         const { commentBody } = req.body;
         const commentPitch = new Comment({
             userId: req.user._id,
+            userFname:req.user.firstname,
+            userLname:req.user.lastname,
             commentDate: new Date(),
             commentBody: commentBody
         });
@@ -93,12 +111,12 @@ router.post('/pitch/:pitchId', async (req, res, next) => {
 })
 
 //delete comment from player 
-router.delete('/:commentId', async (req, res, next) => {
+router.delete('/:commentId/:playerId', async (req, res, next) => {
     try {
 
         let comment = await Comment.findById({ _id: req.params.commentId });
         if (!comment) return next(CreateError(404, error));
-        let player = await Player.findById({ _id: req.user.playerId });
+        let player = await Player.findById({ _id: req.params.playerId});
         let playerComments = player.commentIds;
         console.log(playerComments);
         let index1 = playerComments.findIndex(el => el === req.params.commentId);
@@ -108,7 +126,7 @@ router.delete('/:commentId', async (req, res, next) => {
             console.log(playerComments);
 
             let deletedComment = await Comment.deleteOne({ _id: req.params.commentId });
-            let palyerUpdated = await Player.findByIdAndUpdate(req.user.playerId, { commentIds: playerComments }, { new: true })
+            let palyerUpdated = await Player.findByIdAndUpdate(req.params.playerId, { commentIds: playerComments }, { new: true })
             res.send({ deletedComment, palyerUpdated });
         }
     }
@@ -153,7 +171,7 @@ router.patch('/:commentId', async (req, res, next) => {
             res.send(commentUpadted);
         }
     }
-    catch (err) {
+     catch (err) {
         return next(CreateError(400, err));
     }
 })
