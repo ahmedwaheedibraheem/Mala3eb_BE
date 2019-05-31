@@ -1,6 +1,7 @@
 // pitch
 const mongoose = require('mongoose');
 const validator = require('validator');
+
 const pitchSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -91,9 +92,14 @@ const pitchSchema = new mongoose.Schema({
     }
 },
     {
-        collection: 'pitchs',
+        collection: 'pitches',
         toJSON: {
             hidden: ['__v'],
             transform: true
         }
     });
+
+    // Creating pitch model
+var pitch = mongoose.model('pitch', pitchSchema)
+
+module.exports = pitch;

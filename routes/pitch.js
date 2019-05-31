@@ -13,7 +13,7 @@ router.get("/", async (req, res, next) => {
             res.send(pitches);
         });
     } catch (error) {
-        next(createError(400, err))
+        next(createError(400, error))
     }
 });
 
