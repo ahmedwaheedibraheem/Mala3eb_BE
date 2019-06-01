@@ -62,8 +62,8 @@ router.post('/add', async (req, res, next) => {
         })
         const newPlayer = new Player(obj);
         let addedPlayer = await newPlayer.save();
-        await User.findByIdAndUpdate(req.user._id, { playerId: addedPlayer._id });
-        res.send(addedPlayer);
+        let user = await User.findByIdAndUpdate(req.user._id, { playerId: addedPlayer._id },{new:true});
+        res.send({addedPlayer,user});
     } catch (error) {
         next(createError(400, error));
     }
