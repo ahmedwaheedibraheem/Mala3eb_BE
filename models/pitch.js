@@ -10,7 +10,13 @@ const pitchSchema = new mongoose.Schema({
     },
     imgURL: {
         type: String,
-        validate: validator.isURL
+        validate: validator.isURL,
+        required: true
+    },
+    address: {
+        type: String,
+        maxlength: 300,
+        required: true
     },
     specs: {
         lights: {
@@ -31,26 +37,15 @@ const pitchSchema = new mongoose.Schema({
         validate: validator.isMobilePhone,
         required: true
     },
-    governerate: {  // search
-        type: String,
-        required: true
-    },
-    city: {
-        type: String,
-        required: true
-    },
     lights: {
         type: Boolean,
+    },
+    rate: {
+        type: Number,
         required: true
     },
-    pricePerHour: {
-        day: {
-            type: Number,
-            required: true
-        },
-        night: {
-            type: Number
-        }
+    nightRate: {
+        type: Number
     },
     pitchLength: {
         type: Number,
@@ -61,28 +56,10 @@ const pitchSchema = new mongoose.Schema({
         required: true
     },
     changeRoom: {
-        type: Number,
-        default: 0,
-        min: 0
+        type: Boolean,
     },
     showerRoom: {
-        type: Number,
-        default: 0,
-        min: 0
-    },
-    location: {
-        label: {
-            type: String,
-            required: true
-        },
-        lat: {
-            type: Number,
-            required: true
-        },
-        lng: {
-            type: Number,
-            required: true
-        }
+        type: Boolean,
     },
     imgsURL: {
         type: [String]
@@ -99,7 +76,16 @@ const pitchSchema = new mongoose.Schema({
         }
     });
 
-    // Creating pitch model
+// Hidding __v
+pitchSchema.options.toJSON.transform = function (doc, ret, options) {
+    if (Array.isArray(options.hidden)) {
+        options.hidden.forEach(field => {
+            delete ret[field];
+        });
+    };
+};
+
+// Creating pitch model
 var pitch = mongoose.model('pitch', pitchSchema)
 
 module.exports = pitch;
