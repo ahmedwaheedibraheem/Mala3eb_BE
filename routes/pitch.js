@@ -32,41 +32,28 @@ router.use(authenticationMiddleware);
 // post
 router.post("/", async (req, res, next) => {
     try {
-        const {
-            name,
-            imgURL,
-            mobileNo,
-            governerate,
-            city,
-            lights,
-            pricePerHour,
-            pitchLength,
-            pitchWidth,
-            changeRoom,
-            showerRoom,
-            location
-
-        } = req.body;
-        const pitch = new Pitch({
-            name,
-            imgURL,
-            mobileNo,
-            governerate,
-            city,
-            lights,
-            pricePerHour,
-            pitchLength,
-            pitchWidth,
-            changeRoom,
-            showerRoom,
-            location
+        const pitchObj = {};
+        const arr = ['name',
+            'imgURL',
+            'mobileNo',
+            'address',
+            'lights',
+            'rate',
+            'pitchLength',
+            'pitchWidth',
+            'changeRoom',
+            'showerRoom'];
+        arr.forEach(field => {
+            if (req.body[field]) {
+                pitchObj[field] = req.body[field]
+            };
         });
-        const addedPitch = await pitch.save()
-        const USER = req.user;
-        const newPitchId = [...USER.pitchId]
-        newPitchId.push(addedPitch._id)
-        await User.findByIdAndUpdate(USER._id, { pitchId: newPitchId }, { new: true });
-        res.send(addedPitch)
+        const newPitch = new Pitch(pitchObj);
+        const addedPitch = await newPitch.save();
+        const pitchId = [...req.user.pitchId]
+        pitchId.push(addedPitch._id)
+        const user = await User.findByIdAndUpdate(req.user._id, { pitchId: pitchId }, { new: true });
+        res.send({ addedPitch, user })
     }
     catch (error) {
         next(createError(400, error))
@@ -93,18 +80,16 @@ router.delete('/:pitchId', async (req, res, next) => {
 router.patch('/:pitchId', async (req, res, next) => {
     const _id = req.params.pitchId;
     const obj = {};
-    const arr = ["name",
-        "imgURL",
-        "mobileNo",
-        "governerate",
-        "city",
-        "lights",
-        "pricePerHour",
-        "pitchLength",
-        "pitchWidth",
-        "changeRoom",
-        "showerRoom",
-        "location"];
+    const arr = ['name',
+        'imgURL',
+        'mobileNo',
+        'address',
+        'lights',
+        'rate',
+        'pitchLength',
+        'pitchWidth',
+        'changeRoom',
+        'showerRoom'];
     arr.forEach(field => {
         if (req.body[field]) {
             obj[field] = req.body[field]
