@@ -42,7 +42,8 @@ router.post("/", async (req, res, next) => {
             'pitchLength',
             'pitchWidth',
             'changeRoom',
-            'showerRoom'];
+            'showerRoom',
+            'imgsURL'];
         arr.forEach(field => {
             if (req.body[field]) {
                 pitchObj[field] = req.body[field]
@@ -86,6 +87,7 @@ router.patch('/:pitchId', async (req, res, next) => {
         'address',
         'lights',
         'rate',
+        'nightRate',
         'pitchLength',
         'pitchWidth',
         'changeRoom',
