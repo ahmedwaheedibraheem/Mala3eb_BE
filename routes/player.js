@@ -8,15 +8,28 @@ const authenticationMiddWare = require('../middleware/authentication');
 
 router.use(authenticationMiddWare);
 
-//getPlayerData
-router.get('/getdata', async (req, res, next) => {
-    try {
-        let player = await Player.findOne({ _id: req.user.playerId });
+//getPlayerData(profile)
+// router.get('/getdata', async (req, res, next) => {
+//     try {
+//         let player = await Player.findOne({ _id: req.user.playerId });
+//         if(!player) return next(createError(404,error));
+//         player.compute();
+//         res.send(player);
+//     }
+//     catch (error) {
+//         next(createError(400, error));
+//     }
+// })
+
+//getplayerbyid (another profile)
+router.get('/:playerId',async (req,res,next)=>{
+    try{
+        let player = await Player.findOne({_id:req.params.playerId});
+        if(!player) return next(createError(404,error));
         player.compute();
         res.send(player);
-    }
-    catch (error) {
-        next(createError(400, error));
+    }catch(error){
+        next(createError(400, error))
     }
 })
 

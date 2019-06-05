@@ -13,12 +13,9 @@ router.use(authenticationMiddleware);
 //search by name
 router.get('/:searchKey', async (req, res, next) => {
     try {
-        // const searchKey = req.params.name;
-        console.log(req.params);
-
+        if(!req.params.searchKey) return next(createError(404, error));
         let playersMatched = await Player.find({ name: req.params.searchKey });
         let pitchesMatched = await Pitch.find({name:req.params.searchKey});
-
         res.send({playersMatched,pitchesMatched});
     }
     catch (error) {
