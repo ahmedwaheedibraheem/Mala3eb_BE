@@ -44,7 +44,9 @@ router.get('/pitch/:pitchId',async (req,res,next)=>{
         for (let key of pitchComments) {
             comments.push(Comment.findById(key))    
         }
-         res.send(await Promise.all(comments));
+        let commentsArr = await Promise.all(comments); 
+        let user = await User.findById(req.user._id);
+         res.send({user,commentsArr});
     }
     catch(err){
         return next(CreateError(400,err));
@@ -139,7 +141,7 @@ router.delete('/:commentId/:playerId', async (req, res, next) => {
 
 //Delete comment from pitch
 
-router.delete('/:commentId/:pitchId', async (req, res, next) => {
+router.delete('/pitch/:commentId/:pitchId', async (req, res, next) => {
     try {
         const pitch = await Pitch.findById({ _id: req.params.pitchId });
         const comment = await Comment.findById({ _id: req.params.commentId });
