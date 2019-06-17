@@ -13,6 +13,11 @@ const pitchSchema = new mongoose.Schema({
         validate: validator.isURL,
         required: true
     },
+    coverImage:{
+        type: String,
+        validate: validator.isURL,
+        required: true
+    },
     address: {
         type: String,
         maxlength: 300,
