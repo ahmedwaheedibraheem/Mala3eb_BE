@@ -6,7 +6,7 @@ const collectionSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
-        maxlength: 10
+        maxlength: 20
     },
     desc: {
         type: String,
@@ -17,22 +17,13 @@ const collectionSchema = new mongoose.Schema({
         type: Date,
         required: true
     },
-    location: {
-        label: {
-            type: String,
-            required: true
-        },
-        lat: {
-            type: Number,
-            required: true
-        },
-        lng: {
-            type: Number,
-            required: true
-        }
+    address: {
+        type: String,
+        required: true,
+        maxlength: 250
     },
-    players:{
-        type:[Number]
+    players: {
+        type: [String]
     }
 },
     {
@@ -42,3 +33,6 @@ const collectionSchema = new mongoose.Schema({
             transform: true
         }
     });
+
+const Collection = mongoose.model('Collection', collectionSchema);
+module.exports = Collection;

@@ -46,6 +46,5 @@ commentSchema.options.toJSON.transform = function (doc, ret, options) {
 };
 
 
-
 const Comment = mongoose.model('Comment', commentSchema);
 module.exports = Comment;

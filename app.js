@@ -9,6 +9,7 @@ const userRouter = require('./routes/user');
 const playerRouter = require('./routes/player');
 const commentRouter = require('./routes/comment');
 const pitchRouter = require('./routes/pitch');
+const collectionRouter = require('./routes/collection');
 const searchRouter = require('./routes/search');
 
 require('./db');
@@ -27,6 +28,7 @@ app.use('/user', userRouter);
 app.use('/player',playerRouter);
 app.use('/comments',commentRouter);
 app.use('/pitch', pitchRouter);
+app.use('/collection',collectionRouter);
 app.use('/search', searchRouter);
 
 

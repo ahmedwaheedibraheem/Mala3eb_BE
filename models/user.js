@@ -40,6 +40,9 @@ const userSchema = new mongoose.Schema({
     },
     pitchId: {
         type: [String]
+    },
+    collectionId:{
+        type:[String]
     }
 },
     {
