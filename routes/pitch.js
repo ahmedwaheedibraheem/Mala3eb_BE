@@ -35,6 +35,7 @@ router.post("/", async (req, res, next) => {
         const pitchObj = {};
         const arr = ['name',
             'imgURL',
+            'coverImage',
             'mobileNo',
             'address',
             'lights',
@@ -83,6 +84,7 @@ router.patch('/:pitchId', async (req, res, next) => {
     const obj = {};
     const arr = ['name',
         'imgURL',
+        'coverImage',
         'mobileNo',
         'address',
         'lights',
