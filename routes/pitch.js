@@ -50,6 +50,12 @@ router.post("/", async (req, res, next) => {
                 pitchObj[field] = req.body[field]
             };
         });
+        let specs = {
+            lights: 0,
+            ground: 0,
+            fixtures: 0
+        }
+        pitchObj.specs = specs;
         const newPitch = new Pitch(pitchObj);
         const addedPitch = await newPitch.save();
         const pitchId = [...req.user.pitchId]

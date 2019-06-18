@@ -8,27 +8,14 @@ const authenticationMiddWare = require('../middleware/authentication');
 
 router.use(authenticationMiddWare);
 
-//getPlayerData(profile)
-// router.get('/getdata/:playername', async (req, res, next) => {
-//     try {
-//         let player = await Player.findOne({ _id: req.user.playerId });
-//         if(!player) return next(createError(404,error));
-//         player.compute();
-//         res.send(player);
-//     }
-//     catch (error) {
-//         next(createError(400, error));
-//     }
-// })
-
 //getplayerbyid (another profile)
-router.get('/:playerId',async (req,res,next)=>{
-    try{
-        let player = await Player.findOne({_id:req.params.playerId});
-        if(!player) return next(createError(404,error));
+router.get('/:playerId', async (req, res, next) => {
+    try {
+        let player = await Player.findOne({ _id: req.params.playerId });
+        if (!player) return next(createError(404, error));
         player.compute();
         res.send(player);
-    }catch(error){
+    } catch (error) {
         next(createError(400, error))
     }
 })
@@ -73,10 +60,20 @@ router.post('/add', async (req, res, next) => {
                 obj[field] = req.body[field];
             }
         })
+        let evaluatores = 1;
+        let skills = {
+            pass: 0,
+            shoot: 0,
+            dribble: 0,
+            fitness: 0,
+            speed: 0
+        }
+        obj.evaluatores = evaluatores;
+        obj.skills = skills;
         const newPlayer = new Player(obj);
         let addedPlayer = await newPlayer.save();
-        let user = await User.findByIdAndUpdate(req.user._id, { playerId: addedPlayer._id },{new:true});
-        res.send({addedPlayer,user});
+        let user = await User.findByIdAndUpdate(req.user._id, { playerId: addedPlayer._id }, { new: true });
+        res.send({ addedPlayer, user });
     } catch (error) {
         next(createError(400, error));
     }
