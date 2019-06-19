@@ -109,6 +109,7 @@ router.patch('/:pitchId', async (req, res, next) => {
     res.send(pitch);
 })
 
+//evaluate the pitch specs
 router.post('/eval/:pitchId', async (req, res, next) => {
     try {
         let pitch = await Pitch.findOne({ _id: req.params.pitchId });
