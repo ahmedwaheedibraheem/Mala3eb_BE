@@ -18,6 +18,10 @@ const playerSchema = new mongoose.Schema({
         type: String,
         validate: validator.isURL
     },
+    coverImage: {
+        type: String,
+        validate: validator.isURL
+    },
     age: {
         type: Number,
         min: 6,
@@ -36,7 +40,7 @@ const playerSchema = new mongoose.Schema({
     },
     favPosition: {
         type: String,
-        maxlength: 10, 
+        maxlength: 10,
         required: true
     },
     skills: {
