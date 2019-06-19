@@ -13,7 +13,7 @@ const pitchSchema = new mongoose.Schema({
         validate: validator.isURL,
         required: true
     },
-    coverImage:{
+    coverImage: {
         type: String,
         validate: validator.isURL,
         required: true
@@ -22,6 +22,11 @@ const pitchSchema = new mongoose.Schema({
         type: String,
         maxlength: 300,
         required: true
+    },
+    evaluatores: {
+        type: Number,
+        min: 0,
+        default: 0
     },
     specs: {
         lights: {
@@ -80,6 +85,13 @@ const pitchSchema = new mongoose.Schema({
             transform: true
         }
     });
+
+pitchSchema.method('compute', function () {
+    this.specs.lights = this.specs.lights / this.evaluatores;
+    this.specs.ground = this.specs.ground / this.evaluatores;
+    this.specs.fixtures = this.specs.fixtures / this.evaluatores;
+    return this.specs;
+})
 
 // Hidding __v
 pitchSchema.options.toJSON.transform = function (doc, ret, options) {
