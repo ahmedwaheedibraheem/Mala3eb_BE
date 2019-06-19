@@ -67,7 +67,7 @@ router.post('/add', async (req, res, next) => {
             return res.send('This user is Already aplayer !');
         }
         const obj = {};
-        let arr = ["name", "imgURL", "favNum", "age", "mobileNo", "address", "favPosition"];
+        let arr = ["name", "imgURL", "coverImage", "favNum", "age", "mobileNo", "address", "favPosition"];
         arr.forEach(field => {
             if (req.body[field]) {
                 obj[field] = req.body[field];
