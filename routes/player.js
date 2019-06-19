@@ -26,6 +26,8 @@ router.post('/eval', async (req, res, next) => {
         const { pass, shoot, dribble, fitness, speed } = req.body;
         if (!pass || !shoot || !dribble || !fitness || !speed) return next(createError(404, "missing parameter"));
         const obj = { pass, shoot, dribble, fitness, speed };
+        
+        
         let updatedPlayer = await Player.findByIdAndUpdate(req.user.playerId, { skills: obj }, { new: true });
         res.send(updatedPlayer);
     }

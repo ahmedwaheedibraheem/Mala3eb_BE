@@ -94,6 +94,17 @@ router.delete("/:collectionId", async (req, res, next) => {
     }
 })
 
+//get all players in the collection
+router.get('/players/:collectionId',async(req,res,next)=>{
+    try{
+        let collection = await Collection.findOne({_id:req.params.collectionId});
+        res.send(collection.players)
+    }
+    catch(error){
+        next(createError(400,error));
+    }
+})
+
 //add player to collection (myself)
 router.post('/players/:collectionId', async (req, res, next) => {
     try {
