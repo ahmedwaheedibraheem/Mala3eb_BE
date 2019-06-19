@@ -21,14 +21,25 @@ router.get('/:playerId', async (req, res, next) => {
 })
 
 //addEvaluation
-router.post('/eval', async (req, res, next) => {
+router.post('/eval/:playerId', async (req, res, next) => {
     try {
+        let player = await Player.findOne({ _id: req.params.playerId });
+        if (!player) return (next(createError(404, 'NOT FOUND')));
         const { pass, shoot, dribble, fitness, speed } = req.body;
         if (!pass || !shoot || !dribble || !fitness || !speed) return next(createError(404, "missing parameter"));
-        const obj = { pass, shoot, dribble, fitness, speed };
-        
-        
-        let updatedPlayer = await Player.findByIdAndUpdate(req.user.playerId, { skills: obj }, { new: true });
+        let obj = { pass, shoot, dribble, fitness, speed };
+        let skills = player.skills;
+        const keys = Object.keys(obj);
+        keys.forEach(key => {
+            obj[key] = skills[key] + obj[key];
+        });
+        let evalNo = player.evaluatores + 1;
+        let updatedPlayer = await Player.findByIdAndUpdate(req.user.playerId,
+            {
+                skills: obj,
+                evaluatores: evalNo
+            },
+            { new: true });
         res.send(updatedPlayer);
     }
     catch (error) {

@@ -13,7 +13,7 @@ const verify = util.promisify(jwt.verify);
 const saltRounds = Number(process.env.SALT_ROUNDS) || 10;
 const secretKey = process.env.SECRET_KEY || 'jesuistrescontentdetevoirenegypt';
 
-const tokenExpiry = process.env.TOKEN_EXPIRY || '60m'
+const tokenExpiry = process.env.TOKEN_EXPIRY || '240m'
 const userSchema = new mongoose.Schema({
     firstname: {
         type: String,
