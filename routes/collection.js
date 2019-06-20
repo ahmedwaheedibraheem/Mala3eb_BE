@@ -95,14 +95,14 @@ router.delete("/:collectionId", async (req, res, next) => {
 })
 
 //get all players in the collection
-router.get('/players/:collectionId',async(req,res,next)=>{
-    try{
-        let collection = await Collection.findOne({_id:req.params.collectionId});
-        if(!collection) return next(createError(404,'NOT FOUND'));
+router.get('/players/:collectionId', async (req, res, next) => {
+    try {
+        let collection = await Collection.findOne({ _id: req.params.collectionId });
+        if (!collection) return next(createError(404, 'NOT FOUND'));
         res.send(collection.players)
     }
-    catch(error){
-        next(createError(400,error));
+    catch (error) {
+        next(createError(400, error));
     }
 })
 
