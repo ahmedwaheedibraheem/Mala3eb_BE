@@ -24,7 +24,7 @@ router.get('/:playerId', async (req, res, next) => {
 router.post('/eval/:playerId', async (req, res, next) => {
     try {
         let player = await Player.findOne({ _id: req.params.playerId });
-        if (!player) return (next(createError(404, 'NOT FOUND')));
+        if (!player) return (next(createError(403, 'NOT FOUND')));
         const { pass, shoot, dribble, fitness, speed } = req.body;
         if (!pass || !shoot || !dribble || !fitness || !speed) return next(createError(404, "missing parameter"));
         let obj = { pass, shoot, dribble, fitness, speed };
