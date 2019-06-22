@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const createError = require("http-errors");
-const mongoose = require('mongoose');
+// const mongoose = require('mongoose');
 const Collection = require("../models/Collection");
 const User = require("../models/user");
 const Player = require("../models/player");
@@ -41,7 +41,8 @@ router.post("/", async (req, res, next) => {
             'name',
             'desc',
             'date',
-            'address'];
+            'address',
+            'numberOfPlayers'];
         arr.forEach(field => {
             if (req.body[field]) {
                 collectionObj[field] = req.body[field]
@@ -99,7 +100,13 @@ router.get('/players/:collectionId', async (req, res, next) => {
     try {
         let collection = await Collection.findOne({ _id: req.params.collectionId });
         if (!collection) return next(createError(404, 'NOT FOUND'));
-        res.send(collection.players)
+        let playerIds = collection.players;
+        let playersDetailsPro = [];
+        playerIds.forEach(el => {
+            playersDetailsPro.push(Player.findOne({ _id: el }));
+        });
+        playersDetails = await Promise.all(playersDetailsPro);
+        res.send(playersDetails);
     }
     catch (error) {
         next(createError(400, error));
@@ -137,7 +144,7 @@ router.post('/players/:collectionId/:playerId', async (req, res, next) => {
         //check if the current user owns the current collection
         let collectionsForCurrUser = [...req.user.collectionId];
         let result = collectionsForCurrUser.includes(req.params.collectionId);
-        if (!result) return next(createError(400, 'You are Not allowed to do that !'));
+        if (result === false) return next(createError(400, 'You are Not allowed to do that !'));
         let joinedPlayers = [...collection.players];
         //checks if the player we want to add is already inside the collection 
         let player = joinedPlayers.includes(req.params.playerId);
@@ -183,7 +190,7 @@ router.delete('/players/:collectionId/:playerId', async (req, res, next) => {
         //check if the current user owns the current collection
         let collectionsForCurrUser = [...req.user.collectionId];
         let result = collectionsForCurrUser.includes(req.params.collectionId);
-        if (!result) return next(createError(400, 'You are Not allowed to do that !'));
+        if (result === false) return next(createError(400, 'You are Not allowed to do that !'));
         let joinedPlayers = [...collection.players];
         //check if there is a player byy this id in this collection
         let player = joinedPlayers.includes(req.params.playerId);

@@ -109,4 +109,31 @@ router.patch('/:pitchId', async (req, res, next) => {
     res.send(pitch);
 })
 
+//evaluate the pitch specs
+router.post('/eval/:pitchId', async (req, res, next) => {
+    try {
+        let pitch = await Pitch.findOne({ _id: req.params.pitchId });
+        if (!pitch) return (next(createError(404, 'NOT FOUND')));
+        const { lights, ground, fixtures } = req.body;
+        if (!lights || !ground || !fixtures) return next(createError(404, 'NOT FOUND'));
+        let obj = { lights, ground, fixtures };
+        let specs = pitch.specs;
+        const keys = Object.keys(obj);
+        keys.forEach(key => {
+            obj[key] = specs[key] + obj[key];
+        })
+        let evalNo = pitch.evaluatores + 1;
+        let updatedPitch = await Pitch.findByIdAndUpdate(req.user.pitchId,
+            {
+                specs: obj,
+                evaluatores: evalNo
+            },
+            { new: true });
+        res.send(updatedPitch);
+    }
+    catch (error) {
+        next(createError(400, error));
+    }
+})
+
 module.exports = router;
