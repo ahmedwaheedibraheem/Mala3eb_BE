@@ -33,5 +33,30 @@ router.post('/login', async (req, res, next) => {
     }
 });
 
+
+// get user by id 
+
+// router.get('/:userId', async (req, res, next) => {
+//     try {
+//         let user = await User.findOne({ _id: req.params.userId });
+//         if (!user) return next(createError(404, error));
+//         res.send(user);
+//     } catch (error) {
+//         next(createError(400, error))
+//     }
+// })
+
+// get user by token 
+router.get('/collectionids', async (req, res, next) => {
+    try {
+        const { authorization: token } = req.headers;
+        if (!token) throw new Error('from user route there was no token ');
+        user = await User.getUserByToken(token);
+        res.send(user.collectionId);
+    } catch (error) {
+        next(createError(401, 'from user route there was no token'))
+    }
+})
+
 // Exports
 module.exports = router;

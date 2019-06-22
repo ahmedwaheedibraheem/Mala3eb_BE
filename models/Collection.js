@@ -24,6 +24,9 @@ const collectionSchema = new mongoose.Schema({
     },
     players: {
         type: [String]
+    },
+    numberOfPlayers: {
+        type: String
     }
 },
     {

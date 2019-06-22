@@ -41,7 +41,8 @@ router.post("/", async (req, res, next) => {
             'name',
             'desc',
             'date',
-            'address'];
+            'address',
+            'numberOfPlayers'];
         arr.forEach(field => {
             if (req.body[field]) {
                 collectionObj[field] = req.body[field]
@@ -189,7 +190,7 @@ router.delete('/players/:collectionId/:playerId', async (req, res, next) => {
         //check if the current user owns the current collection
         let collectionsForCurrUser = [...req.user.collectionId];
         let result = collectionsForCurrUser.includes(req.params.collectionId);
-        if (!result) return next(createError(400, 'You are Not allowed to do that !'));
+        if (result === false) return next(createError(400, 'You are Not allowed to do that !'));
         let joinedPlayers = [...collection.players];
         //check if there is a player byy this id in this collection
         let player = joinedPlayers.includes(req.params.playerId);
