@@ -77,10 +77,10 @@ const playerSchema = new mongoose.Schema({
         type: [Number]
     },
     followers: {
-        type: [Number]
+        type:[Object]
     },
     following: {
-        type: [Number]
+        type: [Object]
     },
     commentIds: {
         type: [String]
