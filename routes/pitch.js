@@ -55,7 +55,7 @@ router.post("/", async (req, res, next) => {
             ground: 0,
             fixtures: 0
         }
-        pitchObj.specs = specs;
+        pitchObj['specs'] = specs;
         const newPitch = new Pitch(pitchObj);
         const addedPitch = await newPitch.save();
         const pitchId = [...req.user.pitchId]
