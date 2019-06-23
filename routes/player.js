@@ -46,7 +46,47 @@ router.post('/eval/:playerId', async (req, res, next) => {
         next(createError(400, error))
     }
 })
+// follow player 
+router.patch('/follow/:playerId', async (req, res, next) => {
+    try {
 
+        if (req.user.playerId != req.params.playerId) {
+            let player = await Player.findOne({ _id: req.params.playerId });
+            let followersArr = [];
+            followersArr = player.followers;
+            if (!followersArr.filter(el => el === req.user.playerId)) return (createError(400, 'you already follow this player'))
+            followersArr.push(await Player.findOne({ _id: req.user.playerId }));
+            let Arr1 = await Promise.all(followersArr);
+
+
+            if (!player) return (next(createError(403, 'NOT FOUND')));
+            let playerMe = await Player.findOne({ _id: req.user.playerId });
+            let followingArr = [];
+            followingArr = playerMe.following;
+            followingArr.push(await Player.findOne({ _id: req.params.playerId }));
+            let Arr = await Promise.all(followingArr);
+            if (!playerMe) return (next(createError(403, 'NOT FOUND')));
+            let updatedPlayer = await Player.findByIdAndUpdate(req.params.playerId, { followers: Arr1 }, { new: true });
+            let updatedPlayerMe = await Player.findByIdAndUpdate(req.user.playerId, { following: Arr }, { new: true });
+            res.send({ updatedPlayer, updatedPlayerMe });
+        }
+    }
+
+    catch (error) {
+
+        next(createError(400, error))
+    }
+})
+router.patch('/unfollow/:playerId', async (req, res, next) => {
+    try {
+
+
+    }
+    catch (error) {
+
+        next(createError(400, error))
+    }
+})
 //editPlayerImage
 router.patch('/img', async (req, res, next) => {
     try {
