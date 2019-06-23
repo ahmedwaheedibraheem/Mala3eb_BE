@@ -46,8 +46,8 @@ router.get('/:userId', async (req, res, next) => {
     }
 })
 
-// get user by token 
-router.get('/collectionids', async (req, res, next) => {
+// get collection ids in the user by token 
+router.get('/collection/hamada', async (req, res, next) => {
     try {
         const { authorization: token } = req.headers;
         if (!token) throw new Error('from user route there was no token ');

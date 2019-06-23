@@ -3,6 +3,7 @@ const router = express.Router();
 const createError = require("http-errors");
 const Player = require("../models/player");
 const Pitch = require("../models/pitch");
+const Collection = require("../models/Collection");
 // const User = require("../models/user");
 
 const authenticationMiddleware = require('../middleware/authentication');
@@ -16,8 +17,8 @@ router.get('/:searchKey', async (req, res, next) => {
         if (!req.params.searchKey) return next(createError(404, error));
         let playersMatched = await Player.find({ name: req.params.searchKey });
         let pitchesMatched = await Pitch.find({ name: req.params.searchKey });
-        // let collectionsMatched = await Collection.find({ name: req.params.searchKey });
-        res.send({ playersMatched, pitchesMatched });
+        let collectionsMatched = await Collection.find({ name: req.params.searchKey });
+        res.send({ playersMatched, pitchesMatched, collectionsMatched });
     }
     catch (error) {
         next(createError(400, error))
