@@ -89,18 +89,18 @@ router.delete('/:pitchId', async (req, res, next) => {
 router.patch('/:pitchId', async (req, res, next) => {
     const _id = req.params.pitchId;
     const obj = {};
-    const arr = ['name',
+    const arr = [
+        'name',
         'imgURL',
         'coverImage',
         'mobileNo',
         'address',
         'lights',
-        'rate',
         'nightRate',
         'pitchLength',
         'pitchWidth',
-        'changeRoom',
-        'showerRoom'];
+        'specs'
+    ];
     arr.forEach(field => {
         if (req.body[field]) {
             obj[field] = req.body[field]
