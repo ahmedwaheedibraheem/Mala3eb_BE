@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+var mongoose = require('mongoose');
 const createError = require("http-errors");
 const Pitch = require("../models/pitch");
 const User = require("../models/user");
@@ -107,6 +108,73 @@ router.patch('/:pitchId', async (req, res, next) => {
     })
     let pitch = await Pitch.findByIdAndUpdate(_id, obj, { new: true });
     res.send(pitch);
+})
+
+//list all reservations of the pitch
+router.get('/bookings/:pitchId/:dateInput', async (req, res, next) => {
+    try {
+        let pitch = await Pitch.findOne({ _id: req.params.pitchId });
+        if (!pitch) return (next(createError(404, 'NOT FOUND')));
+        let BookingsList = pitch.bookings;
+        let result = [];
+        BookingsList.forEach(element => {
+            if (element['date'] === req.params.dateInput) {
+                result.push(element);
+            }
+        })
+        res.send(result);
+    }
+    catch (error) {
+        next(createError(400, error))
+    }
+})
+
+//add reservation to the pitch
+router.patch('/bookings/:pitchId', async (req, res, next) => {
+    try {
+        let id = mongoose.Types.ObjectId();
+        console.log(id);
+        let pitch = await Pitch.findOne({ _id: req.params.pitchId });
+        if (!pitch) return (next(createError(404, 'NOT FOUND')));
+        let arr = ['date', 'name', 'from', 'to'];
+        let pitchBookings = pitch.bookings;
+        let result = true;
+        pitchBookings.forEach(element => {
+            if (element['date'] === req.body['date']) {
+                if (element['from'] === req.body['from']) {
+                    result = false;
+                }
+            }
+        });
+        if (result === false) return (next(createError(403, 'Reserved')))
+        let resObj = {};
+        arr.forEach(el => {
+            resObj[el] = req.body[el];
+        });
+        resObj.id = id;
+        pitchBookings.push(resObj);
+        let updatedPitch = await Pitch.findByIdAndUpdate(req.params.pitchId, { bookings: pitchBookings }, { new: true })
+        res.send(updatedPitch);
+    }
+    catch (error) {
+        next(createError(400, error))
+    }
+})
+
+//delete the reservation
+router.delete('/bookings/:pitchId/:bookId', async (req, res, next) => {
+    try {
+        let pitch = await Pitch.findOne({ _id: req.params.pitchId });
+        if (!pitch) return (next(createError(404, 'NOT FOUND')));
+        let bookings = pitch.bookings;
+        let newBookings = bookings.filter(el => el.id != req.params.bookId);
+        let updatedPitch = await Pitch.findByIdAndUpdate(req.params.pitchId,{bookings:newBookings},{new:true});
+        res.send(updatedPitch);
+    }
+    catch (error) {
+        next(createError(400, error));
+    }
+
 })
 
 //evaluate the pitch specs

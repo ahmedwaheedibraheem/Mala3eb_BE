@@ -27,6 +27,9 @@ const pitchSchema = new mongoose.Schema({
         min: 0,
         default: 0
     },
+    bookings:{
+        type:[Object]
+    },
     specs: {
         lights: {
             type: Number,
