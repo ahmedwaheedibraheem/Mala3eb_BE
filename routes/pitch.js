@@ -99,7 +99,8 @@ router.patch('/:pitchId', async (req, res, next) => {
         'nightRate',
         'pitchLength',
         'pitchWidth',
-        'specs'
+        'changeRoom',
+        'showerRoom'
     ];
     arr.forEach(field => {
         if (req.body[field]) {
@@ -168,7 +169,7 @@ router.delete('/bookings/:pitchId/:bookId', async (req, res, next) => {
         if (!pitch) return (next(createError(404, 'NOT FOUND')));
         let bookings = pitch.bookings;
         let newBookings = bookings.filter(el => el.id != req.params.bookId);
-        let updatedPitch = await Pitch.findByIdAndUpdate(req.params.pitchId,{bookings:newBookings},{new:true});
+        let updatedPitch = await Pitch.findByIdAndUpdate(req.params.pitchId, { bookings: newBookings }, { new: true });
         res.send(updatedPitch);
     }
     catch (error) {
